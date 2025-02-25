@@ -58,9 +58,6 @@ const Home: React.FC = () => {
       <IonContent
         fullscreen
         style={{
-          // overflowY: "auto",
-          // overflowX: "hidden",
-          // "--overflow": "hidden",
           "--background": "#f4f5f8",
           "--padding-bottom": "10px",
         }}
