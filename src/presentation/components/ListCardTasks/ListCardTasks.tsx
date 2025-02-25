@@ -1,5 +1,5 @@
-import { Task } from "../../core/entities/Task";
-import CardTask from "./CardTask";
+import { Task } from "../../../core/entities/Task";
+import CardTask from "../CardTask";
 
 interface ListCardTasksProps {
   tasks: Task[];

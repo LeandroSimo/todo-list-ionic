@@ -21,6 +21,7 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
         border: "1px solid rgba(255, 255, 255, 0.2)",
         overflow: "hidden",
       }}
+      data-testid="card-task"
     >
       {/* Contêiner para o título e os ícones */}
       <div
@@ -59,6 +60,7 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
               "--background": "transparent",
               "--box-shadow": "none",
             }}
+            data-testid="edit-task-button"
           >
             <IonIcon icon={createOutline} style={{ color: "#0051E0" }} />
           </IonButton>
@@ -72,6 +74,7 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
               "--background": "transparent",
               "--box-shadow": "none",
             }}
+            data-testid="delete-task-button"
           >
             <IonIcon icon={trashOutline} style={{ color: "#ff3b30" }} />
           </IonButton>

@@ -2,7 +2,7 @@ import { IonContent, IonPage } from "@ionic/react";
 import TodoHeader from "../components/TodoHeader/TodoHeader";
 import ListButtonsFilter from "../components/ListButtonsFilter";
 import { Task, TaskStatus } from "../../core/entities/Task";
-import ListCardTasks from "../components/ListCardTasks";
+import ListCardTasks from "../components/ListCardTasks/ListCardTasks";
 
 const Home: React.FC = () => {
   const tasks: Task[] = [
