@@ -67,6 +67,7 @@ const TodoHeader = () => {
               "--background": "var(--ion-color-primary)",
             }}
             onClick={handleOpenModal}
+            data-testid="add-task-button"
           >
             <IonIcon
               slot="icon-only"
