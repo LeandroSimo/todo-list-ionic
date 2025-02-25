@@ -28,7 +28,7 @@ const TodoHeader = () => {
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        padding: "16px 16px",
+        padding: "16px",
       }}
     >
       <div style={{ display: "flex", flexDirection: "column" }}>

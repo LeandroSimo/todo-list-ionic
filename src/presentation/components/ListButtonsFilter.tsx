@@ -18,15 +18,32 @@ const ListButtonsFilter: React.FC<ListButtonsFilterProps> = ({
   ];
 
   return (
-    <div style={{ display: "flex", gap: "10px", padding: "10px" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "16px",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       {buttons.map((button) => (
-        <ButtonFilter
+        <div
           key={button.filterKey}
-          title={button.title}
-          count={button.filterKey === "pendentes" ? listSizePending : 0}
-          onClick={() => setFilter(button.filterKey)}
-          isActive={filter === button.filterKey}
-        />
+          style={{
+            display: "flex",
+            alignItems: "stretch",
+            minWidth: "100px",
+            maxWidth: "200px",
+          }}
+        >
+          <ButtonFilter
+            title={button.title}
+            count={button.filterKey === "pendentes" ? listSizePending : 0}
+            onClick={() => setFilter(button.filterKey)}
+            isActive={filter === button.filterKey}
+          />
+        </div>
       ))}
     </div>
   );

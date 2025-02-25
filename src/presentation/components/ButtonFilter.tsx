@@ -18,7 +18,9 @@ const ButtonFilter: React.FC<ButtonFilterProps> = ({
       <button
         onClick={onClick}
         style={{
-          padding: "15px 33px",
+          width: "100%",
+          height: "100%",
+          padding: "15px ",
           fontSize: "16px",
           fontWeight: "bold",
           borderRadius: "50px",
@@ -34,8 +36,8 @@ const ButtonFilter: React.FC<ButtonFilterProps> = ({
         <span
           style={{
             position: "absolute",
-            top: "3px",
-            right: "15px",
+            top: "-3px",
+            right: "5px",
             backgroundColor: "red",
             color: "white",
             borderRadius: "50%",
