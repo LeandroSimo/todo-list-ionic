@@ -24,6 +24,25 @@ const Home: React.FC = () => {
       description: "Esta é uma descrição de exemplo para a tarefa 3.",
       status: TaskStatus.OPEN,
     },
+    {
+      id: 4,
+      title: "Tarefa de exemplo 4",
+      description: "Esta é uma descrição de exemplo para a tarefa 4.",
+      status: TaskStatus.OPEN,
+    },
+
+    {
+      id: 5,
+      title: "Tarefa de exemplo 5",
+      description: "Esta é uma descrição de exemplo para a tarefa 5.",
+      status: TaskStatus.OPEN,
+    },
+    {
+      id: 6,
+      title: "Tarefa de exemplo 6",
+      description: "Esta é uma descrição de exemplo para a tarefa 6.",
+      status: TaskStatus.OPEN,
+    },
   ];
 
   const handleDelete = (task: Task) => {
@@ -36,7 +55,16 @@ const Home: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent
+        fullscreen
+        style={{
+          // overflowY: "auto",
+          // overflowX: "hidden",
+          // "--overflow": "hidden",
+          "--background": "#f4f5f8",
+          "--padding-bottom": "10px",
+        }}
+      >
         {/* Cabeçalho da página */}
         <TodoHeader />
         {/* Botões de filtro */}
