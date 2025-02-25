@@ -10,7 +10,8 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "start": "json-server --watch backend/database.json --port 5000"
+    "start": "ionic serve",
+    "api": "json-server --watch backend/database.json --port 5000"
   },
   "dependencies": {
     "@capacitor/android": "^7.0.1",
