@@ -34,7 +34,7 @@ const TodoHeader = () => {
       <div style={{ display: "flex", flexDirection: "column" }}>
         {/* Dia atual  */}
         <IonText
-          style={{ fontSize: "24px", fontWeight: "bold", color: "black" }}
+          style={{ fontSize: "26px", fontWeight: "bold", color: "black" }}
         >
           {formattedDate}
         </IonText>
