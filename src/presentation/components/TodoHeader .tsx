@@ -32,17 +32,20 @@ const TodoHeader = () => {
       }}
     >
       <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* Dia atual  */}
         <IonText
           style={{ fontSize: "24px", fontWeight: "bold", color: "black" }}
         >
           {formattedDate}
         </IonText>
+        {/* Tarefas pendentes */}
         <IonText>
           <p style={{ fontSize: "14px", color: "gray", margin: 0 }}>
             0 tarefas pendentes
           </p>
         </IonText>
       </div>
+      {/* Botão para adicionar nova tarefa */}
       <IonButtons slot="end">
         <IonButton
           shape="round"
