@@ -5,8 +5,8 @@ import api from "../services/api";
 export class TaskRepositoryImpl implements TaskRepository {
   async getTasks(): Promise<Task[]> {
     try {
-      const responde = await api.get(API_URL);
-      return responde.data as Task[];
+      const responde = await api.get<Task[]>(API_URL);
+      return responde.data;
     } catch (error) {
       console.error("Erro ao carregar tarefas:", error);
       throw new Error("Erro ao carregar tarefas. Tente novamente mais tarde.");
@@ -15,10 +15,10 @@ export class TaskRepositoryImpl implements TaskRepository {
 
   async getTasksByStatus(status: string): Promise<Task[]> {
     try {
-      const response = await api.get(API_URL, {
+      const response = await api.get<Task[]>(API_URL, {
         params: { status },
       });
-      return response.data as Task[];
+      return response.data;
     } catch (error) {
       console.error("Erro ao carregar tarefas:", error);
       throw new Error("Erro ao carregar tarefas. Tente novamente mais tarde.");
@@ -27,8 +27,8 @@ export class TaskRepositoryImpl implements TaskRepository {
 
   async addTask(task: Task): Promise<Task> {
     try {
-      const response = await api.post(API_URL, task);
-      return response.data as Task;
+      const response = await api.post<Task>(API_URL, task);
+      return response.data;
     } catch (error) {
       console.error("Erro ao adicionar tarefa:", error);
       throw new Error("Erro ao adicionar tarefa. Tente novamente mais tarde.");
@@ -37,8 +37,8 @@ export class TaskRepositoryImpl implements TaskRepository {
 
   async updateTask(task: Task): Promise<Task> {
     try {
-      const response = await api.put(`${API_URL}/${task.id}`, task);
-      return response.data as Task;
+      const response = await api.put<Task>(`${API_URL}/${task.id}`, task);
+      return response.data;
     } catch (error) {
       console.error("Erro ao atualizar tarefa:", error);
       throw new Error("Erro ao atualizar tarefa. Tente novamente mais tarde.");
