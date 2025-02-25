@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import TodoHeader from "./presentation/components/TodoHeader ";
 import { vi } from "vitest";
+import TodoHeader from "./TodoHeader";
 
 // Mock do @ionic/react
 vi.mock("@ionic/react", async () => {

@@ -3,7 +3,7 @@ import { add } from "ionicons/icons";
 import { ptBR } from "date-fns/locale";
 import { format } from "date-fns";
 import { setDefaultOptions } from "date-fns/setDefaultOptions";
-import ModalTask from "./ModalTask";
+import ModalTask from "../ModalTask/ModalTask";
 import { useState } from "react";
 
 setDefaultOptions({ locale: ptBR });
