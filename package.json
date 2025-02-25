@@ -12,9 +12,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/android": "^7.0.1",
     "@capacitor/app": "7.0.0",
     "@capacitor/core": "7.0.1",
     "@capacitor/haptics": "7.0.0",
+    "@capacitor/ios": "^7.0.1",
     "@capacitor/keyboard": "7.0.0",
     "@capacitor/status-bar": "7.0.0",
     "@ionic/react": "^8.0.0",
@@ -35,7 +37,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-legacy": "^5.0.0",
+    "@vitejs/plugin-legacy": "^6.0.1",
     "@vitejs/plugin-react": "^4.0.1",
     "cypress": "^13.5.0",
     "eslint": "^8.35.0",
@@ -43,8 +45,8 @@
     "jsdom": "^22.1.0",
     "terser": "^5.4.0",
     "typescript": "^5.1.6",
-    "vite": "~5.2.0",
-    "vitest": "^0.34.6"
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7"
   },
   "description": "An Ionic project"
 }
