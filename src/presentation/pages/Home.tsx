@@ -4,9 +4,12 @@ import ListButtonsFilter from "../components/ListButtonsFilter";
 import { Task, TaskStatus } from "../../core/entities/Task";
 import ListCardTasks from "../components/ListCardTasks/ListCardTasks";
 import useTasks from "../hooks/useTasks";
+import { useState } from "react";
 
 const Home: React.FC = () => {
-  const { tasks, isLoading } = useTasks();
+  const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN);
+
+  const { tasks, openTasks, isLoading } = useTasks(filter);
 
   const handleDelete = (task: Task) => {
     console.log("Tarefa deletada:", task);
@@ -26,12 +29,12 @@ const Home: React.FC = () => {
         }}
       >
         {/* Cabeçalho da página */}
-        <TodoHeader countTasks={tasks.length} />
+        <TodoHeader countTasks={openTasks.length} />
         {/* Botões de filtro */}
         <ListButtonsFilter
-          listSizePending={tasks.length}
-          filter="pendentes"
-          setFilter={() => {}}
+          listSizePending={openTasks.length}
+          filter={filter}
+          setFilter={setFilter}
         />
         {/* Lista de tarefas */}
         <ListCardTasks

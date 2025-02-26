@@ -1,8 +1,9 @@
+import { TaskStatus } from "../../core/entities/Task";
 import ButtonFilter from "./ButtonFilter";
 
 interface ListButtonsFilterProps {
-  filter: string;
-  setFilter: (filter: string) => void;
+  filter: TaskStatus;
+  setFilter: (filter: TaskStatus) => void;
   listSizePending?: number;
 }
 
@@ -12,9 +13,9 @@ const ListButtonsFilter: React.FC<ListButtonsFilterProps> = ({
   listSizePending,
 }) => {
   const buttons = [
-    { title: "Pendentes", filterKey: "pendentes" },
-    { title: "Fazendo", filterKey: "fazendo" },
-    { title: "Concluídas", filterKey: "concluidas" },
+    { title: "Pendentes", filterKey: TaskStatus.OPEN },
+    { title: "Fazendo", filterKey: TaskStatus.IN_PROGRESS },
+    { title: "Concluídas", filterKey: TaskStatus.DONE },
   ];
 
   return (
@@ -39,7 +40,7 @@ const ListButtonsFilter: React.FC<ListButtonsFilterProps> = ({
         >
           <ButtonFilter
             title={button.title}
-            count={button.filterKey === "pendentes" ? listSizePending : 0}
+            count={button.filterKey === TaskStatus.OPEN ? listSizePending : 0}
             onClick={() => setFilter(button.filterKey)}
             isActive={filter === button.filterKey}
           />
