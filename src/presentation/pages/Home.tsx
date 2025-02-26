@@ -9,7 +9,7 @@ import { useState } from "react";
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN);
 
-  const { tasks, openTasks, isLoading } = useTasks(filter);
+  const { tasks, openTasks, isLoading, addTask } = useTasks(filter);
 
   const handleDelete = (task: Task) => {
     console.log("Tarefa deletada:", task);
@@ -17,6 +17,19 @@ const Home: React.FC = () => {
 
   const handleEdit = (task: Task) => {
     console.log("Tarefa editada:", task);
+  };
+
+  const handleAddTask = async (title: string, description: string) => {
+    try {
+      await addTask({
+        id: crypto.randomUUID(), // Gera um ID único
+        title,
+        description,
+        status: TaskStatus.OPEN, // Define o status como OPEN
+      });
+    } catch (error) {
+      console.error("Erro ao adicionar tarefa:", error);
+    }
   };
 
   return (
@@ -29,7 +42,7 @@ const Home: React.FC = () => {
         }}
       >
         {/* Cabeçalho da página */}
-        <TodoHeader countTasks={openTasks.length} />
+        <TodoHeader countTasks={openTasks.length} onAddTask={handleAddTask} />
         {/* Botões de filtro */}
         <ListButtonsFilter
           listSizePending={openTasks.length}

@@ -10,9 +10,10 @@ setDefaultOptions({ locale: ptBR });
 
 interface TodoHeaderProps {
   countTasks: number;
+  onAddTask: (title: string, description: string) => void;
 }
 
-const TodoHeader = ({ countTasks }: TodoHeaderProps) => {
+const TodoHeader = ({ countTasks, onAddTask }: TodoHeaderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const currentDate = new Date();
   const formattedDate = format(currentDate, "EEE', 'd' 'MMM'")
@@ -30,9 +31,9 @@ const TodoHeader = ({ countTasks }: TodoHeaderProps) => {
     setIsModalOpen(false);
   };
 
-  const handleConfirmModal = () => {
-    console.log("Tarefa adicionada!");
-    handleOpenModal();
+  const handleConfirmModal = (title: string, description: string) => {
+    onAddTask(title, description); // Chama a função para adicionar tarefa
+    handleCloseModal(); // Fecha o modal
   };
 
   return (

@@ -34,7 +34,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
     onClose();
   };
 
-  // Verifica se a tela é maior que 768px (desktop)
+  // Verifica se a tela é maior que 490px
   const isDesktop = window.innerWidth > 490;
 
   // Modal tradicional para desktop
@@ -175,7 +175,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
         "--width": "100%",
         "--height": "50vh",
         "--border-radius": "16px 16px 0 0",
-        // "--box-shadow": "0 -4px 16px rgba(0, 0, 0, 0.2)",
+        "--box-shadow": "0 -4px 16px rgba(0, 0, 0, 0.2)",
       }}
     >
       <IonHeader>
