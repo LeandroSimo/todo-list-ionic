@@ -31,8 +31,141 @@ const ModalTask: React.FC<ModalTaskProps> = ({
     onConfirm(title, description);
     setTitle("");
     setDescription("");
+    onClose();
   };
 
+  // Verifica se a tela é maior que 768px (desktop)
+  const isDesktop = window.innerWidth > 490;
+
+  // Modal tradicional para desktop
+  if (isDesktop && isOpen) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            width: "400px",
+            padding: "16px",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "16px",
+            }}
+          >
+            <h2 style={{ margin: 0 }}>Adicionar Tarefa</h2>
+            <button
+              onClick={onClose}
+              style={{
+                background: "none",
+                border: "none",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              Fechar
+            </button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
+            {/* Campo para o título */}
+            <div>
+              <label
+                style={{
+                  color: "var(--ion-color-primary)",
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                  display: "block",
+                }}
+              >
+                Título
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Digite o título da tarefa"
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  backgroundColor: "white",
+                }}
+              />
+            </div>
+
+            {/* Campo para a descrição */}
+            <div>
+              <label
+                style={{
+                  color: "var(--ion-color-primary)",
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                  display: "block",
+                }}
+              >
+                Descrição
+              </label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Digite a descrição da tarefa"
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  backgroundColor: "white",
+                }}
+              />
+            </div>
+          </div>
+          <button
+            onClick={handleConfirm}
+            style={{
+              width: "100%",
+              padding: "10px",
+              marginTop: "16px",
+              backgroundColor: "var(--ion-color-primary)",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // IonModal para dispositivos móveis
   return (
     <IonModal
       isOpen={isOpen}
@@ -42,7 +175,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
         "--width": "100%",
         "--height": "50vh",
         "--border-radius": "16px 16px 0 0",
-        "--box-shadow": "0 -4px 16px rgba(0, 0, 0, 0.2)",
+        // "--box-shadow": "0 -4px 16px rgba(0, 0, 0, 0.2)",
       }}
     >
       <IonHeader>
