@@ -9,10 +9,14 @@ import { useState } from "react";
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN);
 
-  const { tasks, openTasks, isLoading, addTask } = useTasks(filter);
+  const { tasks, openTasks, isLoading, addTask, deleteTask } = useTasks(filter);
 
-  const handleDelete = (task: Task) => {
-    console.log("Tarefa deletada:", task);
+  const handleDelete = async (task: Task) => {
+    try {
+      await deleteTask(task);
+    } catch (error) {
+      console.error("Erro ao deletar tarefa:", error);
+    }
   };
 
   const handleEdit = (task: Task) => {
