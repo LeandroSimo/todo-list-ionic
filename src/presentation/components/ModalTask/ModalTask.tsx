@@ -9,6 +9,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
+  IonText,
 } from "@ionic/react";
 import { useState } from "react";
 
@@ -25,12 +26,19 @@ const ModalTask: React.FC<ModalTaskProps> = ({
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
 
   // Função para lidar com a confirmação
   const handleConfirm = () => {
+    if (!title.trim()) {
+      setError("O título é obrigatório!");
+      return;
+    }
+
     onConfirm(title, description);
     setTitle("");
     setDescription("");
+    setError("");
     onClose();
   };
 
@@ -106,16 +114,27 @@ const ModalTask: React.FC<ModalTaskProps> = ({
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  setError("");
+                }}
                 placeholder="Digite o título da tarefa"
                 style={{
                   width: "100%",
                   padding: "8px",
                   borderRadius: "4px",
-                  border: "1px solid #ccc",
+                  border: `1px solid ${error ? "red" : "#ccc"}`,
                   backgroundColor: "white",
                 }}
               />
+              {error && (
+                <IonText
+                  color="danger"
+                  style={{ fontSize: "12px", marginTop: "4px" }}
+                >
+                  {error}
+                </IonText>
+              )}
             </div>
 
             {/* Campo para a descrição */}
@@ -145,21 +164,43 @@ const ModalTask: React.FC<ModalTaskProps> = ({
               />
             </div>
           </div>
-          <button
-            onClick={handleConfirm}
+          <div
             style={{
-              width: "100%",
-              padding: "10px",
+              display: "flex",
+              justifyContent: "space-around",
+              gap: "8px",
               marginTop: "16px",
-              backgroundColor: "var(--ion-color-primary)",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
             }}
           >
-            Confirmar
-          </button>
+            {/* Botão para fechar o modal */}
+            <button
+              onClick={onClose}
+              style={{
+                padding: "10px 16px",
+                backgroundColor: "#ccc",
+                color: "black",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Fechar
+            </button>
+            {/* Botão para confirmar */}
+            <button
+              onClick={handleConfirm}
+              style={{
+                padding: "10px 16px",
+                backgroundColor: "var(--ion-color-primary)",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Confirmar
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -220,9 +261,26 @@ const ModalTask: React.FC<ModalTaskProps> = ({
             </IonLabel>
             <IonInput
               value={title}
-              onIonChange={(e) => setTitle(e.detail.value!)}
-              placeholder="Digite o título da tarefa"
+              onIonChange={(e) => {
+                setTitle(e.detail.value!);
+                setError("");
+              }}
+              placeholder=" Digite o título da tarefa"
+              style={{
+                border: `1px solid ${error ? "red" : "#ccc"}`,
+              }}
             />
+            {error && (
+              <IonText
+                color="danger"
+                style={{
+                  fontSize: "12px",
+                  marginTop: "4px",
+                }}
+              >
+                {error}
+              </IonText>
+            )}
           </IonItem>
 
           {/* Campo para a descrição */}
@@ -241,7 +299,10 @@ const ModalTask: React.FC<ModalTaskProps> = ({
             <IonInput
               value={description}
               onIonChange={(e) => setDescription(e.detail.value!)}
-              placeholder="Digite a descrição da tarefa"
+              placeholder=" Digite a descrição da tarefa"
+              style={{
+                border: "1px solid #ccc",
+              }}
             />
           </IonItem>
         </div>
