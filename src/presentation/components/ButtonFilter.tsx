@@ -32,7 +32,7 @@ const ButtonFilter: React.FC<ButtonFilterProps> = ({
       >
         {title}
       </button>
-      {count! > 0 && title === "Pendentes" && isActive && (
+      {count! > 0 && title === "Pendentes" && (
         <span
           style={{
             position: "absolute",

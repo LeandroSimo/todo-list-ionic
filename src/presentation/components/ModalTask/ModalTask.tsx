@@ -275,8 +275,8 @@ const ModalTask: React.FC<ModalTaskProps> = ({
             </IonLabel>
             <IonInput
               value={title}
-              onIonChange={(e) => {
-                setTitle(e.detail.value!);
+              onInput={(_e) => {
+                setTitle((_e.target as HTMLInputElement).value);
                 setError("");
               }}
               placeholder=" Digite o título da tarefa"
@@ -312,7 +312,9 @@ const ModalTask: React.FC<ModalTaskProps> = ({
             </IonLabel>
             <IonInput
               value={description}
-              onIonChange={(e) => setDescription(e.detail.value!)}
+              onInput={(_e) => {
+                setDescription((_e.target as HTMLInputElement).value);
+              }}
               placeholder=" Digite a descrição da tarefa"
               style={{
                 border: "1px solid #ccc",
