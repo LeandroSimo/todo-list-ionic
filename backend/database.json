@@ -1,14 +1,22 @@
 {
   "tasks": [
     {
-      "id": "2",
-      "title": "Configurar backend com JSON Server",
-      "status": "completed"
+      "id": 1,
+      "title": "Task 1",
+      "description": "Description 1",
+      "status": "OPEN"
     },
     {
-      "id": "3",
-      "title": "Criar UI inicial com React + Ionic",
-      "status": "in-progress"
+      "id": 2,
+      "title": "Task 2",
+      "description": "Description 2",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "id": 3,
+      "title": "Task 3",
+      "description": "Description 3",
+      "status": "DONE"
     }
   ]
 }

@@ -62,7 +62,14 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
             }}
             data-testid="edit-task-button"
           >
-            <IonIcon icon={createOutline} style={{ color: "#0051E0" }} />
+            <IonIcon
+              icon={createOutline}
+              style={{
+                color: "#0051E0",
+                "--ion-button-hover-background": "transparent", // Remove fundo de hover
+                "--ion-button-hover-opacity": "0",
+              }}
+            />
           </IonButton>
 
           {/* Ícone de deletar */}

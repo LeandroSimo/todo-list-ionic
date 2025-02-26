@@ -8,7 +8,11 @@ import { useState } from "react";
 
 setDefaultOptions({ locale: ptBR });
 
-const TodoHeader = () => {
+interface TodoHeaderProps {
+  countTasks: number;
+}
+
+const TodoHeader = ({ countTasks }: TodoHeaderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const currentDate = new Date();
   const formattedDate = format(currentDate, "EEE', 'd' 'MMM'")
@@ -52,7 +56,7 @@ const TodoHeader = () => {
           {/* Tarefas pendentes */}
           <IonText>
             <p style={{ fontSize: "14px", color: "gray", margin: 0 }}>
-              0 tarefas pendentes
+              {countTasks} tarefas pendentes
             </p>
           </IonText>
         </div>
