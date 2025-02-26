@@ -1,1 +1,1 @@
-const API_URL = '/tasks';
+export const API_URL = "/tasks";

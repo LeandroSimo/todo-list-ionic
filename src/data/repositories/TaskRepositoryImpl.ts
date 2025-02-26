@@ -1,12 +1,13 @@
 import { Task } from "../../core/entities/Task";
+import { API_URL } from "../../core/utils/constants";
 import { TaskRepository } from "../../domain/repositories/TaskRepository";
 import api from "../services/api";
 
 export class TaskRepositoryImpl implements TaskRepository {
   async getTasks(): Promise<Task[]> {
     try {
-      const responde = await api.get<Task[]>(API_URL);
-      return responde.data;
+      const response = await api.get<Task[]>(API_URL);
+      return response.data;
     } catch (error) {
       console.error("Erro ao carregar tarefas:", error);
       throw new Error("Erro ao carregar tarefas. Tente novamente mais tarde.");
