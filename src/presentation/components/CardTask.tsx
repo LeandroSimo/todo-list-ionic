@@ -1,6 +1,8 @@
 import { IonButton, IonIcon } from "@ionic/react";
 import { createOutline, trashOutline } from "ionicons/icons";
 import { Task } from "../../core/entities/Task";
+import { useState } from "react";
+import ModalTask from "./ModalTask/ModalTask";
 
 interface CardTaskProps {
   task: Task;
@@ -9,96 +11,124 @@ interface CardTaskProps {
 }
 
 const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmModal = (title: string, description: string) => {
+    const taskEdited = { ...task, title, description };
+    onEdit(taskEdited); // Chama a função para editar tarefa
+    handleCloseModal(); // Fecha o modal
+  };
+
   return (
-    <div
-      style={{
-        position: "relative",
-        backgroundColor: "white",
-        borderRadius: "12px",
-        padding: "10px 16px",
-        boxShadow: "0 0 6px rgba(0, 0, 0, 0.2)",
-        backdropFilter: "blur(10px)",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
-        overflow: "hidden",
-      }}
-      data-testid="card-task"
-    >
-      {/* Contêiner para o título e os ícones */}
+    <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "6px",
+          position: "relative",
+          backgroundColor: "white",
+          borderRadius: "12px",
+          padding: "10px 16px",
+          boxShadow: "0 0 6px rgba(0, 0, 0, 0.2)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          overflow: "hidden",
         }}
+        data-testid="card-task"
       >
-        {/* Título da tarefa */}
-        <h3
-          style={{
-            margin: "0",
-            fontSize: "18px",
-            fontWeight: "bold",
-            color: "#333",
-          }}
-        >
-          {task.title}
-        </h3>
-
-        {/* Ícones de ações (deletar e editar) */}
+        {/* Contêiner para o título e os ícones */}
         <div
           style={{
             display: "flex",
-            gap: "8px", // Espaçamento entre os ícones
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "6px",
           }}
         >
-          {/* Ícone de editar */}
-          <IonButton
-            onClick={() => onEdit(task)} // Passa a task ao clicar em editar
+          {/* Título da tarefa */}
+          <h3
             style={{
-              "--padding-start": "0",
-              "--padding-end": "0",
-              "--background": "transparent",
-              "--box-shadow": "none",
+              margin: "0",
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#333",
             }}
-            data-testid="edit-task-button"
           >
-            <IonIcon
-              icon={createOutline}
-              style={{
-                color: "#0051E0",
-                "--ion-button-hover-background": "transparent", // Remove fundo de hover
-                "--ion-button-hover-opacity": "0",
-              }}
-            />
-          </IonButton>
+            {task.title}
+          </h3>
 
-          {/* Ícone de deletar */}
-          <IonButton
-            onClick={() => onDelete(task)} // Passa a task ao clicar em deletar
+          {/* Ícones de ações (deletar e editar) */}
+          <div
             style={{
-              "--padding-start": "0",
-              "--padding-end": "0",
-              "--background": "transparent",
-              "--box-shadow": "none",
+              display: "flex",
+              gap: "8px", // Espaçamento entre os ícones
             }}
-            data-testid="delete-task-button"
           >
-            <IonIcon icon={trashOutline} style={{ color: "#ff3b30" }} />
-          </IonButton>
+            {/* Ícone de editar */}
+            <IonButton
+              onClick={() => {
+                handleOpenModal();
+              }} // Passa a task ao clicar em editar
+              style={{
+                "--padding-start": "0",
+                "--padding-end": "0",
+                "--background": "transparent",
+                "--box-shadow": "none",
+              }}
+              data-testid="edit-task-button"
+            >
+              <IonIcon
+                icon={createOutline}
+                style={{
+                  color: "#0051E0",
+                  "--ion-button-hover-background": "transparent", // Remove fundo de hover
+                  "--ion-button-hover-opacity": "0",
+                }}
+              />
+            </IonButton>
+
+            {/* Ícone de deletar */}
+            <IonButton
+              onClick={() => onDelete(task)} // Passa a task ao clicar em deletar
+              style={{
+                "--padding-start": "0",
+                "--padding-end": "0",
+                "--background": "transparent",
+                "--box-shadow": "none",
+              }}
+              data-testid="delete-task-button"
+            >
+              <IonIcon icon={trashOutline} style={{ color: "#ff3b30" }} />
+            </IonButton>
+          </div>
         </div>
+
+        {/* Descrição da tarefa */}
+        <p
+          style={{
+            margin: "0",
+            fontSize: "14px",
+            color: "#666",
+          }}
+        >
+          {task.description}
+        </p>
       </div>
 
-      {/* Descrição da tarefa */}
-      <p
-        style={{
-          margin: "0",
-          fontSize: "14px",
-          color: "#666",
-        }}
-      >
-        {task.description}
-      </p>
-    </div>
+      {/* Modal para editar tarefa */}
+      <ModalTask
+        initialTitle={task.title}
+        initialDescription={task.description}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmModal}
+        isOpen={isModalOpen}
+      />
+    </>
   );
 };
 

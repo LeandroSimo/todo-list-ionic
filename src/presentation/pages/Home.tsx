@@ -9,7 +9,8 @@ import { useState } from "react";
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN);
 
-  const { tasks, openTasks, isLoading, addTask, deleteTask } = useTasks(filter);
+  const { tasks, openTasks, isLoading, addTask, updateTask, deleteTask } =
+    useTasks(filter);
 
   const handleDelete = async (task: Task) => {
     try {
@@ -19,8 +20,12 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleEdit = (task: Task) => {
-    console.log("Tarefa editada:", task);
+  const handleEdit = async (task: Task) => {
+    try {
+      await updateTask(task);
+    } catch (error) {
+      console.error("Erro ao editar tarefa:", error);
+    }
   };
 
   const handleAddTask = async (title: string, description: string) => {

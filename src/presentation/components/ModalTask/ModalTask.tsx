@@ -11,22 +11,32 @@ import {
   IonLabel,
   IonText,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ModalTaskProps {
   isOpen: boolean;
   onConfirm: (title: string, description: string) => void;
   onClose: () => void;
+  initialTitle?: string;
+  initialDescription?: string;
 }
 
 const ModalTask: React.FC<ModalTaskProps> = ({
   isOpen,
   onConfirm,
   onClose,
+  initialTitle = "",
+  initialDescription = "",
 }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(initialTitle);
+  const [description, setDescription] = useState(initialDescription);
   const [error, setError] = useState("");
+
+  // Atualiza os estados quando os valores iniciais mudam
+  useEffect(() => {
+    setTitle(initialTitle);
+    setDescription(initialDescription);
+  }, [initialTitle, initialDescription]);
 
   // Função para lidar com a confirmação
   const handleConfirm = () => {
@@ -79,7 +89,9 @@ const ModalTask: React.FC<ModalTaskProps> = ({
               marginBottom: "16px",
             }}
           >
-            <h2 style={{ margin: 0 }}>Adicionar Tarefa</h2>
+            <h2 style={{ margin: 0 }}>
+              {initialTitle ? "Editar Tarefa" : "Adicionar Tarefa"}
+            </h2>
             <button
               onClick={onClose}
               style={{
@@ -198,7 +210,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
                 cursor: "pointer",
               }}
             >
-              Confirmar
+              {initialTitle ? "Salvar" : "Confirmar"}
             </button>
           </div>
         </div>
@@ -221,7 +233,9 @@ const ModalTask: React.FC<ModalTaskProps> = ({
     >
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Adicionar Tarefa</IonTitle>
+          <IonTitle>
+            {initialTitle ? "Editar Tarefa" : "Adicionar Tarefa"}
+          </IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={onClose}>Fechar</IonButton>
           </IonButtons>
@@ -311,7 +325,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
           onClick={handleConfirm}
           style={{ margin: "5px" }}
         >
-          Confirmar
+          {initialTitle ? "Salvar" : "Confirmar"}
         </IonButton>
       </IonContent>
     </IonModal>
