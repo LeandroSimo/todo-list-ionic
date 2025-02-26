@@ -38,7 +38,7 @@ const useTasks = (filter: TaskStatus) => {
         setIsLoading(true);
 
         // Adiciona um delay para simular o carregamento
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         const tasks = await getTasksByStatusUseCase.execute(filter);
         setTasks(tasks);

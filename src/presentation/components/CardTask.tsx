@@ -78,6 +78,8 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
                 "--padding-start": "0",
                 "--padding-end": "0",
                 "--background": "transparent",
+                "--background-activated": "transparent",
+                "--background-focused": "transparent",
                 "--box-shadow": "none",
               }}
               data-testid="edit-task-button"
@@ -99,6 +101,8 @@ const CardTask: React.FC<CardTaskProps> = ({ task, onDelete, onEdit }) => {
                 "--padding-start": "0",
                 "--padding-end": "0",
                 "--background": "transparent",
+                "--background-activated": "transparent",
+                "--background-focused": "transparent",
                 "--box-shadow": "none",
               }}
               data-testid="delete-task-button"
