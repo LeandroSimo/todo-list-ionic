@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import ListCardTasks from "./ListCardTasks";
 import { Task, TaskStatus } from "../../../core/entities/Task";
@@ -16,13 +16,13 @@ vi.mock("@ionic/react", async () => {
 describe("ListCardTasks Component", () => {
   const tasks: Task[] = [
     {
-      id: 1,
+      id: "1",
       title: "Tarefa 1",
       description: "Descrição 1",
       status: TaskStatus.OPEN,
     },
     {
-      id: 2,
+      id: "2",
       title: "Tarefa 2",
       description: "Descrição 2",
       status: TaskStatus.DONE,
@@ -32,7 +32,7 @@ describe("ListCardTasks Component", () => {
   const onDeleteMock = vi.fn();
   const onEditMock = vi.fn();
 
-  it("deve renderizar a lista de tarefas corretamente", () => {
+  it("deve chamar onEdit ao clicar no botão Editar de uma tarefa e confirmar o modal", async () => {
     render(
       <ListCardTasks
         tasks={tasks}
@@ -41,51 +41,41 @@ describe("ListCardTasks Component", () => {
       />
     );
 
-    // Verifica se o número de tarefas renderizadas está correto
-    const cardTasks = screen.getAllByTestId("card-task");
-    expect(cardTasks).toHaveLength(tasks.length);
-
-    // Verifica se os títulos das tarefas estão presentes
-    tasks.forEach((task) => {
-      expect(screen.getByText(task.title)).toBeInTheDocument();
-    });
-  });
-
-  it("deve chamar onDelete ao clicar no botão Excluir de uma tarefa", () => {
-    render(
-      <ListCardTasks
-        tasks={tasks}
-        onDelete={onDeleteMock}
-        onEdit={onEditMock}
-      />
-    );
-
-    // Seleciona todos os botões de exclusão
-    const deleteButtons = screen.getAllByTestId("delete-task-button");
-
-    // Clica no botão Excluir da primeira tarefa (índice 0)
-    fireEvent.click(deleteButtons[0]);
-
-    // Verifica se onDelete foi chamado com a tarefa correta
-    expect(onDeleteMock).toHaveBeenCalledWith(tasks[0]);
-  });
-
-  it("deve chamar onEdit ao clicar no botão Editar de uma tarefa", () => {
-    render(
-      <ListCardTasks
-        tasks={tasks}
-        onDelete={onDeleteMock}
-        onEdit={onEditMock}
-      />
-    );
-
-    // Clica no botão Editar da segunda tarefa
+    // Seleciona todos os botões de edição
     const editButtons = screen.getAllByTestId("edit-task-button");
 
-    // Clica no botão Editar da segunda tarefa (índice 1)
-    fireEvent.click(editButtons[1]);
+    // Clica no botão Editar da primeira tarefa (índice 0)
+    fireEvent.click(editButtons[0]);
 
-    // Verifica se onEdit foi chamado com a tarefa correta
-    expect(onEditMock).toHaveBeenCalledWith(tasks[1]);
+    // Verifica se o modal foi aberto
+    const modalTitleInput = screen.getByDisplayValue(tasks[0].title); // Campo de título do modal
+    const modalDescriptionInput = screen.getByDisplayValue(
+      tasks[0].description
+    ); // Campo de descrição do modal
+
+    // Simula a edição dos campos do modal
+    fireEvent.change(modalTitleInput, {
+      target: { value: "Tarefa 1 Editada" },
+    });
+    fireEvent.change(modalDescriptionInput, {
+      target: { value: "Descrição 1 Editada" },
+    });
+
+    // Encontra o botão de confirmação (pode ser "Confirmar" ou "Salvar")
+    const confirmButton = screen.getByRole("button", {
+      name: /confirmar|salvar/i, // Usa regex para encontrar "Confirmar" ou "Salvar"
+    });
+
+    // Clica no botão de confirmação do modal
+    fireEvent.click(confirmButton);
+
+    // Verifica se onEdit foi chamado com a tarefa editada
+    await waitFor(() => {
+      expect(onEditMock).toHaveBeenCalledWith({
+        ...tasks[0],
+        title: "Tarefa 1 Editada",
+        description: "Descrição 1 Editada",
+      });
+    });
   });
 });

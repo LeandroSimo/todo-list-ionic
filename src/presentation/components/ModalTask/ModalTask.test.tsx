@@ -28,33 +28,52 @@ describe("ModalTask Component", () => {
     expect(modalTitle).toBeInTheDocument();
   });
 
-  it("deve chamar a função onConfirm ao clicar no botão de confirmar", () => {
+  test("deve chamar a função onConfirm ao clicar no botão de confirmar", () => {
+    const onConfirmMock = vi.fn();
+    const onCloseMock = vi.fn();
+
     render(
       <ModalTask
         isOpen={true}
-        onConfirm={onConfirmMock}
         onClose={onCloseMock}
+        onConfirm={onConfirmMock}
       />
     );
 
-    const confirmButton = screen.getByText(/Confirmar/i);
-    fireEvent.click(confirmButton);
+    // Preenche os campos
+    fireEvent.change(screen.getByPlaceholderText("Digite o título da tarefa"), {
+      target: { value: "Nova Tarefa" },
+    });
+    fireEvent.change(
+      screen.getByPlaceholderText("Digite a descrição da tarefa"),
+      {
+        target: { value: "Descrição da tarefa" },
+      }
+    );
 
-    expect(onConfirmMock).toHaveBeenCalledTimes(1);
+    // Clica no botão Confirmar
+    fireEvent.click(screen.getByText("Confirmar"));
+
+    // Verifica se onConfirm foi chamado com os valores corretos
+    expect(onConfirmMock).toHaveBeenCalledWith(
+      "Nova Tarefa",
+      "Descrição da tarefa"
+    );
   });
 
-  it("deve chamar a função onClose ao clicar no botão de fechar", () => {
+  test("deve chamar a função onClose ao clicar no botão de fechar", () => {
+    const onCloseMock = vi.fn();
+
     render(
-      <ModalTask
-        isOpen={true}
-        onConfirm={onConfirmMock}
-        onClose={onCloseMock}
-      />
+      <ModalTask isOpen={true} onClose={onCloseMock} onConfirm={() => {}} />
     );
 
-    const closeButton = screen.getByText(/Fechar/i);
-    fireEvent.click(closeButton);
+    // Seleciona o botão de fechar no cabeçalho
+    const closeButton = screen.getAllByText("Fechar");
+    fireEvent.click(closeButton[0]);
+    fireEvent.click(closeButton[1]);
 
-    expect(onCloseMock).toHaveBeenCalledTimes(1);
+    // Verifica se onClose foi chamado uma vez
+    expect(onCloseMock).toHaveBeenCalledTimes(2);
   });
 });

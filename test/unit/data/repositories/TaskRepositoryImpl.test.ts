@@ -15,13 +15,13 @@ vi.mock("../../../../src/data/services/api", () => ({
 
 const mockTasks: Task[] = [
   {
-    id: 1,
+    id: "1",
     title: "Tarefa 1",
     description: "Descrição 1",
     status: TaskStatus.DONE,
   },
   {
-    id: 2,
+    id: "2",
     title: "Tarefa 2",
     description: "Descrição 2",
     status: TaskStatus.DONE,
