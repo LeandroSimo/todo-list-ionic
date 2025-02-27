@@ -40,6 +40,7 @@ const TodoHeader = ({ countTasks, onAddTask }: TodoHeaderProps) => {
     <>
       <div
         style={{
+          marginTop: "30px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
