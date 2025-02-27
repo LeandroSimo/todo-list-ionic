@@ -1,21 +1,19 @@
-// presentation/hooks/useTasks.ts
 import { useEffect, useMemo, useState } from "react";
 import { Task, TaskStatus } from "../../core/entities/Task";
 import { TaskRepositoryImpl } from "../../data/repositories/TaskRepositoryImpl";
-import { GetTasksByStatus } from "../../domain/usecases/GetTasksByStatus";
+import { GetTasks } from "../../domain/usecases/GetTasks";
 import { CreateTask } from "../../domain/usecases/CreateTask";
 import { UpdateTask } from "../../domain/usecases/UpdateTask";
 import { DeleteTask } from "../../domain/usecases/DeleteTask";
 
-const useTasks = (filter: TaskStatus) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [openTasks, setOpenTasks] = useState<Task[]>([]);
+const useTasks = () => {
+  const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const taskRepository = useMemo(() => new TaskRepositoryImpl(), []);
 
   // Instanciando os use cases com useMemo para evitar recriação
-  const getTasksByStatusUseCase = useMemo(
-    () => new GetTasksByStatus(taskRepository),
+  const getAllTasksUseCase = useMemo(
+    () => new GetTasks(taskRepository),
     [taskRepository]
   );
   const addTaskUseCase = useMemo(
@@ -31,22 +29,14 @@ const useTasks = (filter: TaskStatus) => {
     [taskRepository]
   );
 
-  // Carrega as tarefas com base no filtro
+  // Carrega todas as tarefas ao iniciar
   useEffect(() => {
-    const loadTasks = async () => {
+    const loadAllTasks = async () => {
       try {
         setIsLoading(true);
 
-        // Adiciona um delay para simular o carregamento
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const tasks = await getTasksByStatusUseCase.execute(filter);
-        setTasks(tasks);
-
-        // Atualiza as tarefas OPEN apenas se o filtro for OPEN
-        if (filter === TaskStatus.OPEN) {
-          setOpenTasks(tasks);
-        }
+        const tasks = await getAllTasksUseCase.execute();
+        setAllTasks(tasks); // Define todas as tarefas
       } catch (error) {
         console.error("Erro ao carregar tarefas:", error);
       } finally {
@@ -54,21 +44,15 @@ const useTasks = (filter: TaskStatus) => {
       }
     };
 
-    loadTasks();
-  }, [filter, getTasksByStatusUseCase]);
+    loadAllTasks();
+  }, [getAllTasksUseCase]);
 
   // Adicionar uma nova tarefa
   const addTask = async (task: Task): Promise<Task> => {
     setIsLoading(true);
     try {
       const addedTask = await addTaskUseCase.execute(task);
-      setTasks((prevTasks) => [...prevTasks, addedTask]);
-
-      // Se a tarefa adicionada tiver status OPEN, atualiza o estado openTasks
-      if (addedTask.status === TaskStatus.OPEN) {
-        setOpenTasks((prevOpenTasks) => [...prevOpenTasks, addedTask]);
-      }
-
+      setAllTasks((prevTasks) => [...prevTasks, addedTask]); // Adiciona a nova tarefa à lista completa
       return addedTask;
     } catch (error) {
       console.error("Erro ao adicionar tarefa:", error);
@@ -83,25 +67,9 @@ const useTasks = (filter: TaskStatus) => {
     setIsLoading(true);
     try {
       const updatedTask = await updateTaskUseCase.execute(task);
-      setTasks((prevTasks) =>
+      setAllTasks((prevTasks) =>
         prevTasks.map((t) => (t.id === task.id ? updatedTask : t))
-      );
-
-      // Atualiza o estado openTasks se a tarefa atualizada mudar de status
-      if (
-        task.status === TaskStatus.OPEN &&
-        updatedTask.status !== TaskStatus.OPEN
-      ) {
-        setOpenTasks((prevOpenTasks) =>
-          prevOpenTasks.filter((t) => t.id !== task.id)
-        );
-      } else if (
-        task.status !== TaskStatus.OPEN &&
-        updatedTask.status === TaskStatus.OPEN
-      ) {
-        setOpenTasks((prevOpenTasks) => [...prevOpenTasks, updatedTask]);
-      }
-
+      ); // Atualiza a tarefa na lista completa
       return updatedTask;
     } catch (error) {
       console.error("Erro ao atualizar tarefa:", error);
@@ -116,14 +84,7 @@ const useTasks = (filter: TaskStatus) => {
     setIsLoading(true);
     try {
       await deleteTaskUseCase.execute(task);
-      setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id));
-
-      // Se a tarefa deletada tiver status OPEN, atualiza o estado openTasks
-      if (task.status === TaskStatus.OPEN) {
-        setOpenTasks((prevOpenTasks) =>
-          prevOpenTasks.filter((t) => t.id !== task.id)
-        );
-      }
+      setAllTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id)); // Remove a tarefa da lista completa
     } catch (error) {
       console.error("Erro ao deletar tarefa:", error);
       throw error;
@@ -133,8 +94,7 @@ const useTasks = (filter: TaskStatus) => {
   };
 
   return {
-    tasks,
-    openTasks,
+    allTasks, // Retorna todas as tarefas
     isLoading,
     addTask,
     updateTask,

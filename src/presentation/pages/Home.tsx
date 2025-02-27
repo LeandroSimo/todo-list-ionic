@@ -7,10 +7,16 @@ import useTasks from "../hooks/useTasks";
 import { useState } from "react";
 
 const Home: React.FC = () => {
-  const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN);
+  const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN); // Filtro inicial é "Pendentes"
+  const { allTasks, isLoading, addTask, updateTask, deleteTask } = useTasks();
 
-  const { tasks, openTasks, isLoading, addTask, updateTask, deleteTask } =
-    useTasks(filter);
+  // Filtra as tarefas com base no status selecionado
+  const filteredTasks = allTasks.filter((task) => task.status === filter);
+
+  // Conta o número de tarefas pendentes (OPEN)
+  const pendingTasksCount = allTasks.filter(
+    (task) => task.status === TaskStatus.OPEN
+  ).length;
 
   const handleDelete = async (task: Task) => {
     try {
@@ -51,16 +57,16 @@ const Home: React.FC = () => {
         }}
       >
         {/* Cabeçalho da página */}
-        <TodoHeader countTasks={openTasks.length} onAddTask={handleAddTask} />
+        <TodoHeader countTasks={pendingTasksCount} onAddTask={handleAddTask} />
         {/* Botões de filtro */}
         <ListButtonsFilter
-          listSizePending={openTasks.length}
+          listSizePending={pendingTasksCount}
           filter={filter}
           setFilter={setFilter}
         />
-        {/* Lista de tarefas */}
+        {/* Lista de tarefas filtradas */}
         <ListCardTasks
-          tasks={tasks}
+          tasks={filteredTasks}
           isLoading={isLoading}
           onDelete={handleDelete}
           onEdit={handleEdit}
