@@ -10,6 +10,8 @@ import {
   IonItem,
   IonLabel,
   IonText,
+  useIonViewWillEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { useEffect, useState } from "react";
 
@@ -31,6 +33,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription);
   const [error, setError] = useState("");
+  const [keyboardHeight, setKeyboardHeight] = useState(0); // Estado para armazenar a altura do teclado
 
   // Atualiza os estados quando os valores iniciais mudam
   useEffect(() => {
@@ -54,6 +57,23 @@ const ModalTask: React.FC<ModalTaskProps> = ({
 
   // Verifica se a tela é maior que 490px
   const isDesktop = window.innerWidth > 490;
+
+  // Detecta quando o teclado está aberto
+  useIonViewWillEnter(() => {
+    window.addEventListener("keyboardWillShow", (event: any) => {
+      setKeyboardHeight(event.keyboardHeight); // Atualiza a altura do teclado
+    });
+
+    window.addEventListener("keyboardWillHide", () => {
+      setKeyboardHeight(0); // Reseta a altura do teclado quando fechado
+    });
+  });
+
+  // Remove os listeners quando o componente é desmontado
+  useIonViewWillLeave(() => {
+    window.removeEventListener("keyboardWillShow", () => {});
+    window.removeEventListener("keyboardWillHide", () => {});
+  });
 
   // Modal tradicional para desktop
   if (isDesktop && isOpen) {
@@ -226,7 +246,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
       style={{
         alignItems: "flex-end",
         "--width": "100%",
-        "--height": "50vh",
+        "--height": `calc(50vh + ${keyboardHeight}px)`, // Ajusta a altura com base no teclado
         "--border-radius": "16px 16px 0 0",
         "--box-shadow": "0 -4px 16px rgba(0, 0, 0, 0.2)",
       }}
@@ -243,7 +263,7 @@ const ModalTask: React.FC<ModalTaskProps> = ({
       </IonHeader>
       <IonContent
         style={{
-          maxHeight: "50vh",
+          maxHeight: `calc(50vh + ${keyboardHeight}px)`, // Ajusta a altura do conteúdo
           overflowY: "auto",
           overflowX: "hidden",
         }}
