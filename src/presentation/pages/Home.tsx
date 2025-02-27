@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, IonToast } from "@ionic/react";
 import TodoHeader from "../components/TodoHeader/TodoHeader";
 import ListButtonsFilter from "../components/ListButtonsFilter";
 import { Task, TaskStatus } from "../../core/entities/Task";
@@ -8,7 +8,8 @@ import { useState } from "react";
 
 const Home: React.FC = () => {
   const [filter, setFilter] = useState<TaskStatus>(TaskStatus.OPEN); // Filtro inicial é "Pendentes"
-  const { allTasks, isLoading, addTask, updateTask, deleteTask } = useTasks();
+  const { allTasks, isLoading, error, addTask, updateTask, deleteTask } =
+    useTasks();
 
   // Filtra as tarefas com base no status selecionado
   const filteredTasks = allTasks.filter((task) => task.status === filter);
@@ -70,6 +71,13 @@ const Home: React.FC = () => {
           isLoading={isLoading}
           onDelete={handleDelete}
           onEdit={handleEdit}
+        />
+        {/* Exibe mensagens de erro */}
+        <IonToast
+          isOpen={!!error} // Exibe o toast se houver erro
+          message={error as string} // Mensagem de erro
+          duration={3000} // Duração do toast
+          color="danger" // Estilo de erro
         />
       </IonContent>
     </IonPage>

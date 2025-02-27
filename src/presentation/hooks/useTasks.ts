@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
-import { Task, TaskStatus } from "../../core/entities/Task";
+import { useState, useMemo, useEffect } from "react";
 import { TaskRepositoryImpl } from "../../data/repositories/TaskRepositoryImpl";
-import { GetTasks } from "../../domain/usecases/GetTasks";
 import { CreateTask } from "../../domain/usecases/CreateTask";
-import { UpdateTask } from "../../domain/usecases/UpdateTask";
 import { DeleteTask } from "../../domain/usecases/DeleteTask";
+import { GetTasks } from "../../domain/usecases/GetTasks";
+import { UpdateTask } from "../../domain/usecases/UpdateTask";
+import { Task } from "../../core/entities/Task";
 
 const useTasks = () => {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const taskRepository = useMemo(() => new TaskRepositoryImpl(), []);
 
   // Instanciando os use cases com useMemo para evitar recriação
@@ -29,63 +31,92 @@ const useTasks = () => {
     [taskRepository]
   );
 
-  // Carrega todas as tarefas ao iniciar
+  // Carregar todas as tarefas ao montar o componente
   useEffect(() => {
     const loadAllTasks = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Simula um delay de 500ms
+        await new Promise((resolve) => setTimeout(resolve, 500));
         const tasks = await getAllTasksUseCase.execute();
         setAllTasks(tasks);
-      } catch (error) {
-        console.error("Erro ao carregar tarefas:", error);
+      } catch (error: any) {
+        handleError(error, "carregar tarefas");
       } finally {
         setIsLoading(false);
       }
     };
-
     loadAllTasks();
   }, [getAllTasksUseCase]);
 
-  // Adicionar uma nova tarefa
+  // Função para tratar erros
+  const handleError = (error: any, action: string) => {
+    console.error(`Erro ao ${action}:`, error);
+
+    if (!navigator.onLine) {
+      setError("Sem conexão com a internet. Verifique sua rede.");
+      return;
+    }
+
+    if (error.code === "ERR_NETWORK" || !error.response) {
+      setError(
+        "Não foi possível se conectar ao servidor. O servidor pode estar fora do ar."
+      );
+      return;
+    }
+
+    if (error.response.status >= 500) {
+      setError("Erro no servidor. Tente novamente mais tarde.");
+    } else if (error.response.status === 404) {
+      setError("Recurso não encontrado.");
+    } else if (error.response.status === 400) {
+      setError("Dados inválidos. Verifique as informações e tente novamente.");
+    } else {
+      setError("Ocorreu um erro inesperado. Tente novamente.");
+    }
+  };
+
+  // Funções para adicionar
   const addTask = async (task: Task): Promise<Task> => {
     setIsLoading(true);
+    setError(null);
     try {
       const addedTask = await addTaskUseCase.execute(task);
       setAllTasks((prevTasks) => [...prevTasks, addedTask]);
       return addedTask;
-    } catch (error) {
-      console.error("Erro ao adicionar tarefa:", error);
+    } catch (error: any) {
+      handleError(error, "adicionar tarefa");
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Atualizar uma tarefa existente
+  // Função para atualizar tarefa
   const updateTask = async (task: Task): Promise<Task> => {
     setIsLoading(true);
+    setError(null);
     try {
       const updatedTask = await updateTaskUseCase.execute(task);
       setAllTasks((prevTasks) =>
         prevTasks.map((t) => (t.id === task.id ? updatedTask : t))
       );
       return updatedTask;
-    } catch (error) {
-      console.error("Erro ao atualizar tarefa:", error);
+    } catch (error: any) {
+      handleError(error, "atualizar tarefa");
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Deletar uma tarefa
+  // Função para deletar tarefa
   const deleteTask = async (task: Task): Promise<void> => {
     setIsLoading(true);
+    setError(null);
     try {
       await deleteTaskUseCase.execute(task);
       setAllTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id));
-    } catch (error) {
-      console.error("Erro ao deletar tarefa:", error);
+    } catch (error: any) {
+      handleError(error, "deletar tarefa");
       throw error;
     } finally {
       setIsLoading(false);
@@ -95,6 +126,7 @@ const useTasks = () => {
   return {
     allTasks,
     isLoading,
+    error,
     addTask,
     updateTask,
     deleteTask,
