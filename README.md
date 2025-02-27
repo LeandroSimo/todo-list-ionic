@@ -162,3 +162,7 @@ cd todo-list-ionic
    ```
 
 ### Agora você está pronto para começar a desenvolver e testar a aplicação Todo List! 🚀
+
+# Atenção 🚨
+
+Talvez a aplicação não consiga se conectar com a API Simulada ao gerar a build para Android e/ou iOS. A indicação é tentar criar uma servidor com o ngrok ou utilizar uma API com uma hospedagem real onde o domínio não seja `localhost`.
