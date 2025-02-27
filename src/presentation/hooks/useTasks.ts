@@ -8,7 +8,7 @@ import { DeleteTask } from "../../domain/usecases/DeleteTask";
 
 const useTasks = () => {
   const [allTasks, setAllTasks] = useState<Task[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const taskRepository = useMemo(() => new TaskRepositoryImpl(), []);
 
   // Instanciando os use cases com useMemo para evitar recriação
@@ -33,10 +33,9 @@ const useTasks = () => {
   useEffect(() => {
     const loadAllTasks = async () => {
       try {
-        setIsLoading(true);
-
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Simula um delay de 500ms
         const tasks = await getAllTasksUseCase.execute();
-        setAllTasks(tasks); // Define todas as tarefas
+        setAllTasks(tasks);
       } catch (error) {
         console.error("Erro ao carregar tarefas:", error);
       } finally {
@@ -52,7 +51,7 @@ const useTasks = () => {
     setIsLoading(true);
     try {
       const addedTask = await addTaskUseCase.execute(task);
-      setAllTasks((prevTasks) => [...prevTasks, addedTask]); // Adiciona a nova tarefa à lista completa
+      setAllTasks((prevTasks) => [...prevTasks, addedTask]);
       return addedTask;
     } catch (error) {
       console.error("Erro ao adicionar tarefa:", error);
@@ -69,7 +68,7 @@ const useTasks = () => {
       const updatedTask = await updateTaskUseCase.execute(task);
       setAllTasks((prevTasks) =>
         prevTasks.map((t) => (t.id === task.id ? updatedTask : t))
-      ); // Atualiza a tarefa na lista completa
+      );
       return updatedTask;
     } catch (error) {
       console.error("Erro ao atualizar tarefa:", error);
@@ -84,7 +83,7 @@ const useTasks = () => {
     setIsLoading(true);
     try {
       await deleteTaskUseCase.execute(task);
-      setAllTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id)); // Remove a tarefa da lista completa
+      setAllTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id));
     } catch (error) {
       console.error("Erro ao deletar tarefa:", error);
       throw error;
@@ -94,7 +93,7 @@ const useTasks = () => {
   };
 
   return {
-    allTasks, // Retorna todas as tarefas
+    allTasks,
     isLoading,
     addTask,
     updateTask,
