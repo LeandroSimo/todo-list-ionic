@@ -1,34 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "1",
-      "title": "Task 1",
-      "description": "Description 1",
-      "status": "OPEN"
-    },
-    {
-      "id": "2",
-      "title": "Task 2",
-      "description": "Description 2",
-      "status": "IN_PROGRESS"
-    },
-    {
-      "id": "3",
-      "title": "Task 3",
-      "description": "Description 3",
-      "status": "DONE"
-    },
-    {
-      "id": "4",
-      "title": "Task 4",
-      "description": "Description 3",
-      "status": "OPEN"
-    },
-    {
-      "id": "030b1d08-acea-4c76-ae77-7ea72250e842",
-      "title": "tarefa teste",
-      "description": "teste",
-      "status": "OPEN"
-    }
-  ]
+  "tasks": []
 }
